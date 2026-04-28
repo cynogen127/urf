@@ -1,5 +1,3 @@
-## This Script having issue when demodulation - will fix it soon - DO NOT CLONE THIS TILL I FIX IT soon
-
 # Universal RF Reverse Engineering Framework
 ## Complete Multi-Device Analysis & Exploitation Tool
 
