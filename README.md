@@ -1,7 +1,7 @@
 # Universal RF Reverse Engineering Framework
 ## Complete Multi-Device Analysis & Exploitation Tool
 
-**"Kepada Tuhan Kita Berserah"** - For Education & Authorized Research Only
+**"Kepada Tuhan Kita Berserah | Seek Forwarn"** - For Education & Authorized Research Only
 
 ---
 
