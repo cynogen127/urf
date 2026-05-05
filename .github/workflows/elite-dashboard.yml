@@ -1,0 +1,58 @@
+name: Elite Dashboard
+
+on:
+  schedule:
+    - cron: "0 */12 * * *"
+  workflow_dispatch:
+
+jobs:
+  dashboard:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install tools
+        run: sudo apt-get install jq -y
+
+      - name: Fetch Repo Data
+        run: |
+          curl -s https://api.github.com/repos/${{ github.repository }} > repo.json
+
+          STARS=$(jq '.stargazers_count' repo.json)
+          FORKS=$(jq '.forks_count' repo.json)
+          ISSUES=$(jq '.open_issues_count' repo.json)
+          WATCHERS=$(jq '.subscribers_count' repo.json)
+
+          SCORE=$((STARS*5 + FORKS*10 + ISSUES*3))
+
+          echo "# 🚀 Elite Project Dashboard" > DASHBOARD.md
+          echo "" >> DASHBOARD.md
+          echo "Last update: $(date)" >> DASHBOARD.md
+          echo "" >> DASHBOARD.md
+
+          echo "## ⭐ Core Metrics" >> DASHBOARD.md
+          echo "- Stars: $STARS" >> DASHBOARD.md
+          echo "- Forks: $FORKS" >> DASHBOARD.md
+          echo "- Watchers: $WATCHERS" >> DASHBOARD.md
+          echo "- Open Issues: $ISSUES" >> DASHBOARD.md
+          echo "" >> DASHBOARD.md
+
+          echo "## 🧠 Adoption Score" >> DASHBOARD.md
+          echo "**Real User Score:** $SCORE" >> DASHBOARD.md
+          echo "" >> DASHBOARD.md
+
+          echo "## 📈 Star History" >> DASHBOARD.md
+          echo "![Star History](https://api.star-history.com/svg?repos=${{ github.repository }}&type=Date)" >> DASHBOARD.md
+
+          echo "" >> DASHBOARD.md
+          echo "## ❤️ Contributors" >> DASHBOARD.md
+          echo "![Contributors](https://contrib.rocks/image?repo=${{ github.repository }})" >> DASHBOARD.md
+
+      - name: Commit Dashboard
+        run: |
+          git config user.name github-actions
+          git config user.email actions@github.com
+          git add DASHBOARD.md
+          git commit -m "auto: elite dashboard update" || echo "No changes"
+          git push
